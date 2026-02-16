@@ -1,33 +1,31 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
-- main
+ - main
 
+
+variables:
+  dockerRegistryServiceConnection: 'azureconatinerreg1'
+  imageRepository: 'karthikarepo'
+  dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
+  tag: '$(Build.BuildId)'
 
 stages:
-  
 - stage: Build
-  displayName: Build stage
-  jobs:  
+  displayName: Build and publish stage
+  jobs:
   - job: Build
     displayName: Build job
     pool:
-      name: Selfhosted1
+      name: 'AzureDevOpsING'
     steps:
+    - task: DockerInstaller@0
+      inputs:
+        dockerVersion: '29.2.0'
     - task: Docker@2
-      displayName: Build and push an image to container registry
+      displayName: Build and publish image to Azure Container Registry
       inputs:
         command: buildAndPush
-        repository: KarthikaRepo
+        containerRegistry: $(dockerRegistryServiceConnection)
+        repository: $(imageRepository)
         dockerfile: $(dockerfilePath)
-        containerRegistry: acr1
-        
-          
-    - task: PublishPipelineArtifact@1
-      inputs:
-        artifactName: 'manifests'
-        path: 'manifests'
-
+        tags: |
+          $(tag)
