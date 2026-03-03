@@ -8,7 +8,7 @@ jobs:
  ci-cd:
   runs-on: ubuntu-latest
   env:
-   DOCKER_IMAGE: karthikamn/flask-api-python-app-lbg
+   DOCKER_IMAGE: marimuthup04/marimuthudockrepo
    
   steps:
     - name: Checkout Code
@@ -17,17 +17,17 @@ jobs:
     - name: Login to Docker
       uses: docker/login-action@v3.3.0
       with:
-       username: ${{secrets.DOCKER_USERNAME1}}
-       password: ${{secrets.DOCKER_PASSWORD1}}
+       username: ${{secrets.DOCKER_HUB_USERNAME}}
+       password: ${{secrets.DOCKER_HUB}}
    
     - name: Build docker image
       run: |
-       docker build -t $DOCKER_IMAGE:${{github.sha}} .
-       docker tag $DOCKER_IMAGE:${{github.sha}} $DOCKER_IMAGE:v1.1
+       docker build -t $DOCKER_IMAGE:1.1 .
+       docker tag $DOCKER_IMAGE:1.0 $DOCKER_IMAGE:v1.1
        
     - name: Push docker image
       run: |
-       docker push $DOCKER_IMAGE:${{github.sha}}
+       docker push $DOCKER_IMAGE:1.1
        docker push $DOCKER_IMAGE:v1.1
 
    
