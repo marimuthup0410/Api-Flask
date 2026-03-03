@@ -7,6 +7,7 @@ on:
 jobs:
  ci-cd:
   runs-on: ubuntu-latest
+  environment: test
   env:
    DOCKER_IMAGE: marimuthup04/marimuthudockrepo
    
